@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
-import {TrilliangularComponent} from 'trilliangular/dist/app/trilliangular.component';
-//import {TrilliangularComponent} from 'trilliangular';
+import {TrilliangularComponent} from 'trilliangular/app/trilliangular.component';
 
 @Component({
 	selector: 'example',
