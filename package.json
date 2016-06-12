@@ -4,11 +4,12 @@
   "description": "Testing Trilliangular framework with a basic example",
   "main": "index.js",
   "scripts": {
-    "postinstall": "typings install",
     "lite": "lite-server",
     "build": "ntsc",
     "ntsc:w": "ntsc -w",
-    "start": "ntsc && concurrently \"npm run ntsc:w\" \"npm run lite\" "
+    "start": "ntsc && concurrently \"npm run ntsc:w\" \"npm run lite\" ",
+	"prod": "npm unlink trilliangular && npm install trilliangular",
+	"dev": "npm prune trilliangular && npm link trilliangular"
   },
   "keywords": [],
   "author": "Elvynia",
