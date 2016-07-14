@@ -5,6 +5,7 @@ import {TgObjectComponent} from 'trilliangular/core/tg-object.component';
 import {TgRendererComponent} from 'trilliangular/core/tg-renderer.component';
 import {TgCameraComponent} from 'trilliangular/core/tg-camera.component';
 import {TgSceneComponent} from 'trilliangular/core/tg-scene.component';
+import {TgKeyboardComponent} from 'trilliangular/core/tg-keyboard.component';
 import {InitializeEvent} from 'trilliangular/event/initialize-event.class';
 import {UpdateEvent} from 'trilliangular/event/update-event.class';
 
@@ -20,12 +21,14 @@ import {ExempleCubeComponent} from './exemple-cube.component';
 			<tg-camera name="PerspectiveCamera" [args]="[45, 600 / 400, 1, 1000]"></tg-camera>
 			<tg-scene type="THREE" name="Scene">
 				<exemple-cube #cube></exemple-cube>
-				<tg-object name="AmbientLight" [args]="10526880" #light></tg-object>
+				<tg-object name="AmbientLight" [args]="[10526880, 2]" #light>
+					<tg-keyboard keys="l" (keyUp)="switchLight($event)"></tg-keyboard>
+				</tg-object>
 			</tg-scene>
 		</trilliangular-app>
 	`,
 	directives: [TrilliangularComponent, TgRendererComponent, TgCameraComponent,
-		TgSceneComponent, TgObjectComponent, ExempleCubeComponent]
+		TgSceneComponent, TgObjectComponent, ExempleCubeComponent, TgKeyboardComponent]
 })
 export class AppComponent {
 	@ViewChild('cube')
@@ -42,5 +45,9 @@ export class AppComponent {
 	private update(event: UpdateEvent) {
 		this.cube.instance.rotation.x += event.delta / 1000;
 		this.cube.instance.rotation.y += event.delta / 1000;
+	}
+	
+	private switchLight(event) {
+		this.light.instance.intensity = this.light.instance.intensity === 2 ? 0 : 2;
 	}
 }
