@@ -1,4 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
+import {FORM_DIRECTIVES} from '@angular/common';
 import {TrilliangularComponent} from 'trilliangular/app/trilliangular.component';
 import {TrilliangularService} from 'trilliangular/app/trilliangular.service';
 import {TgObjectComponent} from 'trilliangular/core/tg-object.component';
@@ -22,12 +23,16 @@ import {ExempleCubeComponent} from './exemple-cube.component';
 			<tg-scene type="THREE" name="Scene">
 				<exemple-cube #cube></exemple-cube>
 				<tg-object name="AmbientLight" [args]="[10526880, 2]" #light>
-					<tg-keyboard keys="l" (keyUp)="switchLight($event)"></tg-keyboard>
+					<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind"></tg-keyboard>
 				</tg-object>
 			</tg-scene>
 		</trilliangular-app>
+		<div>
+			Global bind active : <input type="checkbox" [(ngModel)]="globalBind" />
+			<input type="text" />
+		</div>
 	`,
-	directives: [TrilliangularComponent, TgRendererComponent, TgCameraComponent,
+	directives: [FORM_DIRECTIVES, TrilliangularComponent, TgRendererComponent, TgCameraComponent,
 		TgSceneComponent, TgObjectComponent, ExempleCubeComponent, TgKeyboardComponent]
 })
 export class AppComponent {
@@ -35,6 +40,7 @@ export class AppComponent {
 	private cube: ExempleCubeComponent;
 	@ViewChild('light')
 	private light: TgObjectComponent;
+	globalBind: boolean = false;
 
 	private initialize(event: InitializeEvent) {
 		event.renderer.setSize(event.width, event.height);
