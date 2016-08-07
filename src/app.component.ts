@@ -23,7 +23,7 @@ import {ExempleCubeComponent} from './exemple-cube.component';
 			<tg-scene type="THREE" name="Scene">
 				<exemple-cube #cube></exemple-cube>
 				<tg-object name="AmbientLight" [args]="[10526880, 2]" #light>
-					<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind"></tg-keyboard>
+					<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keyboard>
 				</tg-object>
 			</tg-scene>
 		</trilliangular-app>
