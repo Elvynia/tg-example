@@ -5,7 +5,6 @@
 	"main" : "index.js",
 	"scripts" : {
 		"lite" : "lite-server",
-		"build" : "ntsc",
 		"ntsc:w" : "ntsc -w",
 		"start" : "ntsc && concurrently \"npm run ntsc:w\" \"npm run lite\" ",
 		"prod" : "npm unlink trilliangular && npm install trilliangular",
@@ -37,7 +36,7 @@
 	"devDependencies" : {
 		"concurrently" : "^2.0.0",
 		"lite-server" : "^2.2.0",
-		"ntypescript" : "^1.201605282206.1",
+		"ntypescript" : "^1.x.x",
 		"typescript" : "^1.8.10",
 		"typings" : "^1.0.4"
 	}
