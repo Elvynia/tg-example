@@ -6,15 +6,17 @@ import {TgObjectComponent} from 'trilliangular/core/tg-object.component';
 @Component({
 	selector: 'exemple-cube',
 	template: `
-		<tg-object name="Mesh" [args]="[geometry.instance, material.instance]" #mesh>
+		<tg-object id="{{id}}" name="Mesh" [args]="[geometry.instance, material.instance]" #mesh>
 			<tg-object name="BoxGeometry" [args]="[1, 1, 1]" #geometry></tg-object>
 			<tg-object name="MeshPhongMaterial" [args]="materialArgs" #material></tg-object>
 		</tg-object>
 	`,
+	inputs: ['id'],
 	directives: [TgObjectComponent]
 })
 export class ExempleCubeComponent implements AfterViewInit {
 	private materialArgs: any;
+	private id: string;
 	@ViewChild('mesh')
 	mesh: TgObjectComponent;
 

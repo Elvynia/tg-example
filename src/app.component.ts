@@ -20,14 +20,16 @@ import {ExempleCubeComponent} from './exemple-cube.component';
 			<tg-renderer name="WebGLRenderer" [args]="{canvas: renderTarget}"></tg-renderer>
 			<tg-camera name="PerspectiveCamera" [args]="[45, 600 / 400, 1, 1000]"></tg-camera>
 			<tg-scene type="THREE" name="Scene">
-				<exemple-cube #cube></exemple-cube>
-				<tg-object name="AmbientLight" [args]="[10526880, 2]" #light>
+				<exemple-cube id="exampleCube1" #cube></exemple-cube>
+				<tg-object id="ambientLight" name="AmbientLight" [args]="[10526880, 2]" #light>
 					<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keyboard>
 				</tg-object>
 			</tg-scene>
 		</trilliangular>
 		<div>
 			Global bind active : <input type="checkbox" [(ngModel)]="globalBind" />
+			Light active : <input type="checkbox" [(ngModel)]="lightActive" />
+			<br>
 			<input type="text" />
 		</div>
 	`,
@@ -40,19 +42,20 @@ export class AppComponent {
 	@ViewChild('light')
 	private light: TgObjectComponent;
 	globalBind: boolean = false;
+	lightActive: boolean = true;
 
 	private initialize(event: InitializeEvent) {
 		event.renderer.setSize(event.width, event.height);
 		event.camera.position.z = 5;
-		event.scene.add(this.light.instance);
 	}
 	
 	private update(event: UpdateEvent) {
 		this.cube.instance.rotation.x += event.delta / 1000;
 		this.cube.instance.rotation.y += event.delta / 1000;
+		this.light.instance.intensity = this.lightActive ? 2 : 0;
 	}
 	
 	private switchLight(event) {
-		this.light.instance.intensity = this.light.instance.intensity === 2 ? 0 : 2;
+		this.lightActive = !this.lightActive;
 	}
 }
