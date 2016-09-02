@@ -1,22 +1,20 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, ContentChild} from '@angular/core';
 import {AfterViewInit} from '@angular/core';
 import {TrilliangularService} from 'trilliangular/app/trilliangular.service';
+import {TgActorComponent} from 'trilliangular/core/tg-actor.component';
 import {TgObjectComponent} from 'trilliangular/core/tg-object.component';
 
 @Component({
 	selector: 'exemple-cube',
 	template: `
-		<tg-object id="{{id}}" name="Mesh" [args]="[geometry.instance, material.instance]" #mesh>
+		<tg-object name="Mesh" [args]="[geometry.instance, material.instance]" #mesh>
 			<tg-object name="BoxGeometry" [args]="[1, 1, 1]" #geometry></tg-object>
 			<tg-object name="MeshPhongMaterial" [args]="materialArgs" #material></tg-object>
 		</tg-object>
-	`,
-	inputs: ['id'],
-	directives: [TgObjectComponent]
+	`
 })
-export class ExempleCubeComponent implements AfterViewInit {
+export class ExampleCubeComponent implements AfterViewInit {
 	private materialArgs: any;
-	private id: string;
 	@ViewChild('mesh')
 	mesh: TgObjectComponent;
 

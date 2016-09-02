@@ -11,12 +11,12 @@ import {TgActorComponent} from 'trilliangular/core/tg-actor.component';
 import {TgKeyboardComponent} from 'trilliangular/core/tg-keyboard.component';
 
 import { AppComponent }  from './app.component';
-import { ExempleCubeComponent }  from './exemple-cube.component';
+import { ExampleCubeComponent }  from './example-cube.component';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule ],
   declarations: [ AppComponent, TrilliangularComponent, TgRendererComponent, TgCameraComponent,
-		TgSceneComponent, TgObjectComponent, TgActorComponent, TgKeyboardComponent, ExempleCubeComponent ],
+		TgSceneComponent, TgObjectComponent, TgActorComponent, TgKeyboardComponent, ExampleCubeComponent ],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule {
