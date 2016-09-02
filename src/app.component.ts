@@ -20,17 +20,8 @@ import {ExampleCubeComponent} from './example-cube.component';
 			<tg-renderer name="WebGLRenderer" [args]="{canvas: renderTarget}"></tg-renderer>
 			<tg-camera name="PerspectiveCamera" [args]="[45, 600 / 400, 1, 1000]"></tg-camera>
 			<tg-scene type="THREE" name="Scene">
-				<tg-actor #actor>
-					<exemple-cube #cube></exemple-cube>
-				</tg-actor>
-				<div>
-					CUBE IS INITIALIZED : {{actor.isInitialized}}
-				</div>
-				<div id="cubePosition" *ngIf="actor.isInitialized">
-					Cube position :<br>
-					x -> <input type="number" [(ngModel)]="cube.instance.position.x">
-				</div>
-				<tg-actor [active]="lightActive" [visible]="lightVisible">
+				<example-cube #cube></example-cube>
+				<tg-actor [active]="lightActive" [visible]="lightVisible" #actor>
 					<tg-object name="AmbientLight" [args]="[10526880, 2]" #light>
 						<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keyboard>
 					</tg-object>
@@ -43,6 +34,15 @@ import {ExampleCubeComponent} from './example-cube.component';
 			Light visible : <input type="checkbox" [(ngModel)]="lightVisible" />
 			<br>
 			<input type="text" />
+			<br>
+			<br>
+			<div>
+				CUBE IS INITIALIZED : {{actor.isInitialized}}
+			</div>
+			<div id="cubePosition" *ngIf="actor.isInitialized">
+				Cube position :<br>
+				x -> <input type="number" [(ngModel)]="cube.instance.position.x">
+			</div>
 		</div>
 	`
 })
