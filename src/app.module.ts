@@ -9,6 +9,8 @@ import {TgSceneComponent} from 'trilliangular/core/tg-scene.component';
 import {TgObjectComponent} from 'trilliangular//core/tg-object.component';
 import {TgActorComponent} from 'trilliangular/core/tg-actor.component';
 import {TgKeyboardComponent} from 'trilliangular/core/tg-keyboard.component';
+import {TgBindActorDirective} from 'trilliangular/core/tg-bind-actor.directive';
+import {TgBindSceneDirective} from 'trilliangular/core/tg-bind-scene.directive';
 
 import { AppComponent }  from './app.component';
 import { ExampleCubeComponent }  from './example-cube.component';
@@ -16,7 +18,8 @@ import { ExampleCubeComponent }  from './example-cube.component';
 @NgModule({
   imports:      [ BrowserModule, FormsModule ],
   declarations: [ AppComponent, TrilliangularComponent, TgRendererComponent, TgCameraComponent,
-		TgSceneComponent, TgObjectComponent, TgActorComponent, TgKeyboardComponent, ExampleCubeComponent ],
+		TgSceneComponent, TgObjectComponent, TgActorComponent, TgKeyboardComponent, ExampleCubeComponent,
+		TgBindActorDirective, TgBindSceneDirective],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule {

@@ -16,13 +16,13 @@ import {ExampleCubeComponent} from './example-cube.component';
 	template: `
 		<h1>Trilliangular example</h1>
 		<canvas #renderTarget></canvas>
-		<trilliangular width="600" height="400" (initialize)="initialize($event)" (update)="update($event)">
+		<trilliangular width="600" height="400" (initialize)="initialize($event)">
 			<tg-renderer name="WebGLRenderer" [args]="{canvas: renderTarget}"></tg-renderer>
 			<tg-camera name="PerspectiveCamera" [args]="[45, 600 / 400, 1, 1000]"></tg-camera>
 			<tg-scene type="THREE" name="Scene">
 				<example-cube #cube></example-cube>
-				<tg-actor [active]="lightActive" [visible]="lightVisible" #actor>
-					<tg-object name="AmbientLight" [args]="[10526880, 2]" #light>
+				<tg-actor bindScene [active]="lightActive" [visible]="lightVisible" #actor>
+					<tg-object bindActor name="AmbientLight" [args]="[10526880, 2]" #object>
 						<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keyboard>
 					</tg-object>
 				</tg-actor>
@@ -34,21 +34,10 @@ import {ExampleCubeComponent} from './example-cube.component';
 			Light visible : <input type="checkbox" [(ngModel)]="lightVisible" />
 			<br>
 			<input type="text" />
-			<br>
-			<br>
-			<div>
-				CUBE IS INITIALIZED : {{actor.isInitialized}}
-			</div>
-			<div id="cubePosition" *ngIf="actor.isInitialized">
-				Cube position :<br>
-				x -> <input type="number" [(ngModel)]="cube.instance.position.x">
-			</div>
 		</div>
 	`
 })
 export class AppComponent {
-	@ViewChild('cube')
-	private cube: ExampleCubeComponent;
 	globalBind: boolean = false;
 	lightActive: boolean = true;
 	lightVisible: boolean = true;
@@ -56,11 +45,6 @@ export class AppComponent {
 	private initialize(event: InitializeEvent) {
 		event.renderer.setSize(event.width, event.height);
 		event.camera.position.z = 5;
-	}
-	
-	private update(event: UpdateEvent) {
-		this.cube.instance.rotation.x += event.delta / 1000;
-		this.cube.instance.rotation.y += event.delta / 1000;
 	}
 	
 	private switchLight(event) {
