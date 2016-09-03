@@ -1,4 +1,9 @@
 {
+	"definitions" : {
+		"includeDefinition" : [
+			"typings/**.d.ts"
+		]
+	},
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
@@ -8,12 +13,11 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false,
-	"outDir": "dist/"
+	"outDir": "dist/",
+	"rootDir": "src/"
   },
   "exclude": [
 	"node_modules",
-	"typings/main",
-    "typings/main.d.ts",
 	"dist"
   ]
 }
