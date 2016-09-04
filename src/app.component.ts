@@ -20,8 +20,8 @@ import {ExampleCubeComponent} from './example-cube.component';
 			<tg-renderer name="WebGLRenderer" [args]="{canvas: renderTarget}"></tg-renderer>
 			<tg-camera name="PerspectiveCamera" [args]="[45, 600 / 400, 1, 1000]"></tg-camera>
 			<tg-scene type="THREE" name="Scene">
-				<example-cube #cube></example-cube>
-				<tg-actor bindScene [active]="lightActive" [visible]="lightVisible" #actor>
+				<example-cube></example-cube>
+				<tg-actor id="ambientLight" bindScene [active]="lightActive" [visible]="lightVisible" #actor>
 					<tg-object bindActor name="AmbientLight" [args]="[10526880, 2]" #object>
 						<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keyboard>
 					</tg-object>
