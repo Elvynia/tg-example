@@ -2,7 +2,7 @@ import {Component, ViewChild, ContentChild} from '@angular/core';
 import {TrilliangularService} from 'trilliangular/app/trilliangular.service';
 import {TgObjectComponent} from 'trilliangular/core/tg-object.component';
 import {UpdateActorEvent} from 'trilliangular/event/update-actor-event.class';
-import {InitializeActorEvent} from 'trilliangular/event/initialize-actor-event.class';
+import {StartActorEvent} from 'trilliangular/event/start-actor-event.class';
 
 @Component({
 	selector: 'example-cube',
@@ -35,8 +35,6 @@ import {InitializeActorEvent} from 'trilliangular/event/initialize-actor-event.c
 })
 export class ExampleCubeComponent {
 	private materialArgs: any;
-	@ViewChild('mesh')
-	mesh: TgObjectComponent;
 	private ifActor: boolean;
 	private ifObject: boolean;
 
@@ -51,10 +49,6 @@ export class ExampleCubeComponent {
 		this.ifObject = true;
 	}
 	
-	get instance() {
-		return this.mesh.instance;
-	}
-	
 	private rotateCube(event: UpdateActorEvent) {
 		let object = event.actor.objects[0];
 		if (object) {
@@ -63,7 +57,7 @@ export class ExampleCubeComponent {
 		}
 	}
 	
-	private startCubeRight(event: InitializeActorEvent) {
+	private startCubeRight(event: StartActorEvent) {
 		let object = event.actor.objects[0];
 		if (object) {
 			object.instance.position.x = 2;
@@ -71,7 +65,7 @@ export class ExampleCubeComponent {
 	}
 	
 	
-	private startCubeLeft(event: InitializeActorEvent) {
+	private startCubeLeft(event: StartActorEvent) {
 		let object = event.actor.objects[0];
 		if (object) {
 			object.instance.position.x = -2;

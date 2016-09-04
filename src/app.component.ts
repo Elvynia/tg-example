@@ -6,7 +6,7 @@ import {TgRendererComponent} from 'trilliangular/core/tg-renderer.component';
 import {TgCameraComponent} from 'trilliangular/core/tg-camera.component';
 import {TgSceneComponent} from 'trilliangular/core/tg-scene.component';
 import {TgKeyboardComponent} from 'trilliangular/core/tg-keyboard.component';
-import {InitializeEvent} from 'trilliangular/event/initialize-event.class';
+import {StartEvent} from 'trilliangular/event/start-event.class';
 import {UpdateEvent} from 'trilliangular/event/update-event.class';
 
 import {ExampleCubeComponent} from './example-cube.component';
@@ -16,7 +16,7 @@ import {ExampleCubeComponent} from './example-cube.component';
 	template: `
 		<h1>Trilliangular example</h1>
 		<canvas #renderTarget></canvas>
-		<trilliangular width="600" height="400" (initialize)="initialize($event)">
+		<trilliangular width="600" height="400" (start)="start($event)">
 			<tg-renderer name="WebGLRenderer" [args]="{canvas: renderTarget}"></tg-renderer>
 			<tg-camera name="PerspectiveCamera" [args]="[45, 600 / 400, 1, 1000]"></tg-camera>
 			<tg-scene type="THREE" name="Scene">
@@ -42,7 +42,7 @@ export class AppComponent {
 	lightActive: boolean = true;
 	lightVisible: boolean = true;
 
-	private initialize(event: InitializeEvent) {
+	private start(event: StartEvent) {
 		event.renderer.setSize(event.width, event.height);
 		event.camera.position.z = 5;
 	}
