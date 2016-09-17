@@ -32,8 +32,6 @@ import {ExampleCubeComponent} from './example-cube.component';
 			Global bind active : <input type="checkbox" [(ngModel)]="globalBind" />
 			Light active : <input type="checkbox" [(ngModel)]="lightActive" />
 			Light visible : <input type="checkbox" [(ngModel)]="lightVisible" />
-			<br>
-			<input type="text" />
 		</div>
 	`
 })
