@@ -1,7 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {TrilliangularComponent} from 'trilliangular/app/trilliangular.component';
 import {TgActorComponent} from 'trilliangular/core/tg-actor.component';
-import {TgObjectComponent} from 'trilliangular/core/tg-object.component';
 import {TgRendererComponent} from 'trilliangular/core/tg-renderer.component';
 import {TgCameraComponent} from 'trilliangular/core/tg-camera.component';
 import {TgSceneComponent} from 'trilliangular/core/tg-scene.component';
@@ -15,16 +14,15 @@ import {ExampleCubeComponent} from './example-cube.component';
 	selector: 'example',
 	template: `
 		<h1>Trilliangular example</h1>
-		<canvas #renderTarget></canvas>
 		<trilliangular width="600" height="400" (start)="start($event)">
-			<tg-renderer name="WebGLRenderer" [args]="{canvas: renderTarget}"></tg-renderer>
-			<tg-camera name="PerspectiveCamera" [args]="[45, 600 / 400, 1, 1000]"></tg-camera>
-			<tg-scene type="THREE" name="Scene">
+			<tg-renderer></tg-renderer>
+			<tg-camera></tg-camera>
+			<tg-scene #scene>
 				<example-cube></example-cube>
-				<tg-actor id="ambientLight" bindScene [active]="lightActive" [visible]="lightVisible" #actor>
-					<tg-object bindActor name="AmbientLight" [args]="[10526880, 2]" #object>
+				<tg-actor id="ambientLight" [active]="lightActive" [visible]="lightVisible" #actor>
+					<tg-three bound="true" name="AmbientLight" [args]="[10526880, 2]" #object>
 						<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keyboard>
-					</tg-object>
+					</tg-three>
 				</tg-actor>
 			</tg-scene>
 		</trilliangular>
@@ -33,19 +31,37 @@ import {ExampleCubeComponent} from './example-cube.component';
 			Light active : <input type="checkbox" [(ngModel)]="lightActive" />
 			Light visible : <input type="checkbox" [(ngModel)]="lightVisible" />
 		</div>
+		<div id="sceneInfos">
+			Current actors count : {{actorCount}}
+			<button (click)="logActorCount()">Log actor count</button>
+		</div>
 	`
 })
 export class AppComponent {
-	globalBind: boolean = false;
+	globalBind: boolean = true;
 	lightActive: boolean = true;
 	lightVisible: boolean = true;
+	scene: TgSceneComponent;
+	actorCount: number;
+	
+	ngDoCheck() {
+		if (this.scene && this.actorCount != this.scene.actors.length) {
+			this.actorCount = this.scene.actors.length;
+		}
+	}
 
 	private start(event: StartEvent) {
 		event.renderer.setSize(event.width, event.height);
 		event.camera.position.z = 5;
+		this.scene = event.scene;
 	}
 	
 	private switchLight(event) {
 		this.lightActive = !this.lightActive;
+	}
+	
+	private logActorCount() {
+		console.info('Current actor count : ' + this.scene.actors.length);
+		console.info('Current object count : ' + this.scene.instance.children.length);
 	}
 }

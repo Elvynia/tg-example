@@ -1,30 +1,29 @@
 import {Component, ViewChild, ContentChild} from '@angular/core';
 import {TrilliangularService} from 'trilliangular/app/trilliangular.service';
-import {TgObjectComponent} from 'trilliangular/core/tg-object.component';
 import {UpdateActorEvent} from 'trilliangular/event/update-actor-event.class';
 import {StartActorEvent} from 'trilliangular/event/start-actor-event.class';
 
 @Component({
 	selector: 'example-cube',
 	template: `
-		<tg-actor id="cube" bindScene (update)="rotateCube($event)" *ngIf="ifActor" #actor>
-			<tg-actor id="cubeLeft" bindScene (start)="startCubeLeft($event)">
-				<tg-object name="BoxGeometry" [args]="[1, 1, 1]" #geometry1></tg-object>
-				<tg-object name="MeshPhongMaterial" [args]="{ color: 16711680, specular: 39168, shininess: 30, shading: 1 }" #material1></tg-object>
-				<tg-object bindActor name="Mesh" [args]="[geometry1.instance, material1.instance]"></tg-object>
+		<tg-actor id="cube" (update)="rotateCube($event)" *ngIf="ifActor" #actor>
+			<tg-actor id="cubeLeft" (start)="startCubeLeft($event)">
+				<tg-three name="BoxGeometry" [args]="[1, 1, 1]" #geometry1></tg-three>
+				<tg-three name="MeshPhongMaterial" [args]="{ color: 16711680, specular: 39168, shininess: 30, shading: 1 }" #material1></tg-three>
+				<tg-three bound="true" name="Mesh" [args]="[geometry1.instance, material1.instance]"></tg-three>
 			</tg-actor>
-			<tg-object name="BoxGeometry" [args]="[1, 1, 1]" #geometry></tg-object>
-			<tg-object name="MeshPhongMaterial" [args]="materialArgs" #material></tg-object>
-			<tg-object bindActor name="Mesh" [args]="[geometry.instance, material.instance]" *ngIf="ifObject" #mesh>
-				<div id="cubePosition" *ngIf="actor && actor.initialized && mesh">
+			<tg-three name="BoxGeometry" [args]="[1, 1, 1]" #geometry></tg-three>
+			<tg-three name="MeshPhongMaterial" [args]="materialArgs" #material></tg-three>
+			<tg-three bound="true" name="Mesh" [args]="[geometry.instance, material.instance]" *ngIf="ifObject" #mesh>
+				<div id="cubePosition" *ngIf="mesh && mesh.instance">
 					Cube position :<br>
 					x -> <input type="number" [(ngModel)]="mesh.instance.position.x">
 				</div>
-			</tg-object>
-			<tg-actor id="cubeRight" bindScene (start)="startCubeRight($event)">
-				<tg-object name="BoxGeometry" [args]="[1, 1, 1]" #geometry2></tg-object>
-				<tg-object name="MeshPhongMaterial" [args]="{ color: 255, specular: 39168, shininess: 30, shading: 1 }" #material2></tg-object>
-				<tg-object bindActor name="Mesh" [args]="[geometry2.instance, material2.instance]"></tg-object>
+			</tg-three>
+			<tg-actor id="cubeRight" (start)="startCubeRight($event)">
+				<tg-three name="BoxGeometry" [args]="[1, 1, 1]" #geometry2></tg-three>
+				<tg-three name="MeshPhongMaterial" [args]="{ color: 255, specular: 39168, shininess: 30, shading: 1 }" #material2></tg-three>
+				<tg-three bound="true" name="Mesh" [args]="[geometry2.instance, material2.instance]"></tg-three>
 			</tg-actor>
 		</tg-actor>
 		<div id="destroyTest">
