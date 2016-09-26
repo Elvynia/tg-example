@@ -4,7 +4,7 @@ import {TgActorComponent} from 'trilliangular/core/tg-actor.component';
 import {TgRendererComponent} from 'trilliangular/core/tg-renderer.component';
 import {TgCameraComponent} from 'trilliangular/core/tg-camera.component';
 import {TgSceneComponent} from 'trilliangular/core/tg-scene.component';
-import {TgKeyboardComponent} from 'trilliangular/core/tg-keyboard.component';
+import {TgKeylistenerComponent} from 'trilliangular/core/tg-keylistener.component';
 import {StartEvent} from 'trilliangular/event/start-event.class';
 import {UpdateEvent} from 'trilliangular/event/update-event.class';
 
@@ -21,7 +21,7 @@ import {ExampleCubeComponent} from './example-cube.component';
 				<example-cube></example-cube>
 				<tg-actor id="ambientLight" [active]="lightActive" [visible]="lightVisible" #actor>
 					<tg-three bound="true" name="AmbientLight" [args]="[10526880, 2]" #object>
-						<tg-keyboard keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keyboard>
+						<tg-keylistener keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keylistener>
 					</tg-three>
 				</tg-actor>
 			</tg-scene>

@@ -7,7 +7,7 @@ import {TgRendererComponent} from 'trilliangular/core/tg-renderer.component';
 import {TgCameraComponent} from 'trilliangular/core/tg-camera.component';
 import {TgSceneComponent} from 'trilliangular/core/tg-scene.component';
 import {TgActorComponent} from 'trilliangular/core/tg-actor.component';
-import {TgKeyboardComponent} from 'trilliangular/core/tg-keyboard.component';
+import {TgKeylistenerComponent} from 'trilliangular/core/tg-keylistener.component';
 import {TgThreeComponent} from 'trilliangular/core/tg-three.component';
 
 import { AppComponent }  from './app.component';
@@ -25,7 +25,7 @@ import { TranslationComponent }  from './translation.component';
 	TgCameraComponent,
 	TgSceneComponent,
 	TgActorComponent,
-	TgKeyboardComponent,
+	TgKeylistenerComponent,
 	TgThreeComponent
   ],
   bootstrap:    [ AppComponent ]
