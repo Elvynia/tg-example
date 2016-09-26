@@ -12,11 +12,22 @@ import {TgThreeComponent} from 'trilliangular/core/tg-three.component';
 
 import { AppComponent }  from './app.component';
 import { ExampleCubeComponent }  from './example-cube.component';
+import { TranslationComponent }  from './translation.component';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule ],
-  declarations: [ AppComponent, TrilliangularComponent, TgRendererComponent, TgCameraComponent,
-		TgSceneComponent, TgActorComponent, TgKeyboardComponent, ExampleCubeComponent, TgThreeComponent],
+  declarations: [
+	AppComponent,
+	ExampleCubeComponent,
+	TranslationComponent,
+	TrilliangularComponent,
+	TgRendererComponent,
+	TgCameraComponent,
+	TgSceneComponent,
+	TgActorComponent,
+	TgKeyboardComponent,
+	TgThreeComponent
+  ],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule {

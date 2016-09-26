@@ -18,6 +18,7 @@ import {StartActorEvent} from 'trilliangular/event/start-actor-event.class';
 				<div id="cubePosition" *ngIf="mesh && mesh.instance">
 					Cube position :<br>
 					x -> <input type="number" [(ngModel)]="mesh.instance.position.x">
+					<translation [keys]="['z', 'd', 's', 'q', 'a', 'e']" [(position)]="mesh.instance.position"></translation>
 				</div>
 			</tg-three>
 			<tg-actor id="cubeRight" (start)="startCubeRight($event)">
