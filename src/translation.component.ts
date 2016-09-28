@@ -29,24 +29,15 @@ export class TranslationComponent {
 	}
 	
 	ngOnInit() {
-		this.forward.keyDown.subscribe(() => {
-			this.appService.updateEvent.takeUntil(this.forward.keyUp)
-				.subscribe((updateEvent) => this.position.z += updateEvent.delta / 500);
-		});
-		this.backward.keyDown.subscribe(() => {
-			this.appService.updateEvent.takeUntil(this.backward.keyUp)
-				.subscribe((updateEvent) => this.position.z -= updateEvent.delta / 500);
-		});
-		// this.appService.updateEvent
-			// .skipUntil(this.forward.keyDown)
-			// .takeUntil(this.forward.keyUp)
-			// //.switch()
-			// .subscribe((updateEvent) => this.position.z += updateEvent.delta / 1000);
-		// this.appService.updateEvent
-			// .skipUntil(this.backward.keyDown)
-			// .takeUntil(this.backward.keyUp)
-			// .subscribe((updateEvent) => this.position.z -= updateEvent.delta / 1000);
-		this.appService.updateEvent.subscribe((event) => {
+		// this.forward.keyDown.subscribe(() => {
+			// this.appService.updated.takeUntil(this.forward.keyUp)
+				// .subscribe((updateEvent) => this.position.z += updateEvent.delta / 500);
+		// });
+		// this.backward.keyDown.subscribe(() => {
+			// this.appService.updated.takeUntil(this.backward.keyUp)
+				// .subscribe((updateEvent) => this.position.z -= updateEvent.delta / 500);
+		// });
+		this.appService.update.subscribe((event) => {
 			if (this.directions[0]) {
 				this.position.y += event.delta / 1000;
 			} else if (this.directions[2]) {

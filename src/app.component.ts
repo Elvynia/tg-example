@@ -15,14 +15,13 @@ import {ExampleCubeComponent} from './example-cube.component';
 	template: `
 		<h1>Trilliangular example</h1>
 		<trilliangular width="600" height="400" (start)="start($event)">
-			<tg-renderer></tg-renderer>
-			<tg-camera></tg-camera>
 			<tg-scene #scene>
+				<tg-renderer #renderer></tg-renderer>
 				<example-cube></example-cube>
 				<tg-actor id="ambientLight" [active]="lightActive" [visible]="lightVisible" #actor>
-					<tg-three bound="true" name="AmbientLight" [args]="[10526880, 2]" #object>
+					<tg-object bound="true" name="AmbientLight" [args]="[10526880, 2]" #object>
 						<tg-keylistener keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keylistener>
-					</tg-three>
+					</tg-object>
 				</tg-actor>
 			</tg-scene>
 		</trilliangular>
