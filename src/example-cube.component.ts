@@ -1,31 +1,33 @@
-import {Component, ViewChild, ContentChild} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {TrilliangularService} from 'trilliangular/app/trilliangular.service';
-import {UpdateActorEvent} from 'trilliangular/event/update-actor-event.class';
-import {StartActorEvent} from 'trilliangular/event/start-actor-event.class';
+import {TgSceneService} from 'trilliangular/core/tg-scene.service';
+import {TgObjectComponent} from 'trilliangular/runtime/three/tg-object.component';
 
 @Component({
 	selector: 'example-cube',
 	template: `
-		<tg-actor id="cube" (update)="rotateCube($event)" *ngIf="ifActor" #actor>
-			<tg-actor id="cubeLeft" (start)="startCubeLeft($event)">
-				<tg-object name="BoxGeometry" [args]="[1, 1, 1]" #geometry1></tg-object>
-				<tg-object name="MeshPhongMaterial" [args]="{ color: 16711680, specular: 39168, shininess: 30, shading: 1 }" #material1></tg-object>
-				<tg-object bound="true" name="Mesh" [args]="[geometry1.instance, material1.instance]"></tg-object>
-			</tg-actor>
-			<tg-object name="BoxGeometry" [args]="[1, 1, 1]" #geometry></tg-object>
-			<tg-object name="MeshPhongMaterial" [args]="materialArgs" #material></tg-object>
-			<tg-object bound="true" name="Mesh" [args]="[geometry.instance, material.instance]" *ngIf="ifObject" #mesh>
-				<div id="cubePosition" *ngIf="mesh && mesh.instance">
+		<tg-actor id="cubeLeft" [active]="active" (started)="startCubeLeft($event)">
+			<tg-object bound="true" name="Mesh" #blueCube>
+				<tg-instance name="BoxGeometry" [args]="[1, 1, 1]"></tg-instance>
+				<tg-instance name="MeshPhongMaterial" [args]="{ color: 16711680, specular: 39168, shininess: 30, shading: 1 }"></tg-instance>
+			</tg-object>
+		</tg-actor>
+		<tg-actor id="cube" [active]="active" (updated)="rotateCube($event)" *ngIf="ifActor">
+			<tg-object bound="true" name="Mesh" *ngIf="ifObject" #greenCube>
+				<tg-instance name="BoxGeometry" [args]="[1, 1, 1]"></tg-instance>
+				<tg-instance name="MeshPhongMaterial" [args]="materialArgs"></tg-instance>
+				<div id="cubePosition" *ngIf="greenCubeControls">
 					Cube position :<br>
-					x -> <input type="number" [(ngModel)]="mesh.instance.position.x">
-					<translation [keys]="['z', 'd', 's', 'q', 'a', 'e']" [(position)]="mesh.instance.position"></translation>
+					x -> <input type="number" [(ngModel)]="greenCube.instance.position.x">
+					<translation [keys]="['z', 'd', 's', 'q', 'a', 'e']" [(position)]="greenCube.instance.position"></translation>
 				</div>
 			</tg-object>
-			<tg-actor id="cubeRight" (start)="startCubeRight($event)">
-				<tg-object name="BoxGeometry" [args]="[1, 1, 1]" #geometry2></tg-object>
-				<tg-object name="MeshPhongMaterial" [args]="{ color: 255, specular: 39168, shininess: 30, shading: 1 }" #material2></tg-object>
-				<tg-object bound="true" name="Mesh" [args]="[geometry2.instance, material2.instance]"></tg-object>
-			</tg-actor>
+		</tg-actor>
+		<tg-actor id="cubeRight" [active]="active" (started)="startCubeRight($event)">
+			<tg-object bound="true" name="Mesh" #redCube>
+				<tg-instance name="BoxGeometry" [args]="[1, 1, 1]"></tg-instance>
+				<tg-instance name="MeshPhongMaterial" [args]="{ color: 255, specular: 39168, shininess: 30, shading: 1 }"></tg-instance>
+			</tg-object>
 		</tg-actor>
 		<div id="destroyTest">
 			Actor in DOM <input type="checkbox" [(ngModel)]="ifActor">
@@ -34,11 +36,19 @@ import {StartActorEvent} from 'trilliangular/event/start-actor-event.class';
 	`
 })
 export class ExampleCubeComponent {
+	@Input() active: boolean;
 	private materialArgs: any;
 	private ifActor: boolean;
 	private ifObject: boolean;
+	private greenCubeControls: boolean;
+	@ViewChild('greenCube')
+	private greenCube: TgObjectComponent;
+	@ViewChild('blueCube')
+	private blueCube: TgObjectComponent;
+	@ViewChild('redCube')
+	private redCube: TgObjectComponent;
 
-	constructor(private tgService: TrilliangularService) {
+	constructor(private appService: TrilliangularService, private sceneService: TgSceneService) {
 		this.materialArgs = {
 			color: 0x00ff00,
 			specular: 0x009900,
@@ -47,28 +57,30 @@ export class ExampleCubeComponent {
 		};
 		this.ifActor = true;
 		this.ifObject = true;
+		this.greenCubeControls = false;
 	}
-	
-	private rotateCube(event: UpdateActorEvent) {
-		let object = event.actor.objects[0];
-		if (object) {
-			object.instance.rotation.x += event.delta / 1000;
-			object.instance.rotation.y += event.delta / 1000;
+
+	ngDoCheck() {
+		if (this.greenCube && this.greenCube.instance) {
+			this.greenCubeControls = true;
+		} else {
+			this.greenCubeControls = false;
 		}
 	}
 	
-	private startCubeRight(event: StartActorEvent) {
-		let object = event.actor.objects[0];
-		if (object) {
-			object.instance.position.x = 2;
+	private rotateCube(delta) {
+		if (this.greenCube && this.greenCube.stateService.target.instance) {
+			this.greenCube.instance.rotation.x += delta / 1000;
+			this.greenCube.instance.rotation.y += delta / 1000;
 		}
 	}
 	
+	private startCubeRight(event) {
+		this.redCube.instance.position.x = 2;
+	}
 	
-	private startCubeLeft(event: StartActorEvent) {
-		let object = event.actor.objects[0];
-		if (object) {
-			object.instance.position.x = -2;
-		}
+	
+	private startCubeLeft(event) {
+		this.blueCube.instance.position.x = -2;
 	}
 }

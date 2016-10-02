@@ -1,17 +1,17 @@
 import { Component, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 
-import { TgKeylistenerComponent } from 'trilliangular/core/tg-keylistener.component';
+import { TgKeylistenerComponent } from 'trilliangular/inputs/tg-keylistener.component';
 import { TrilliangularService } from 'trilliangular/app/trilliangular.service';
 
 @Component({
 	selector: 'translation',
 	template: `
-		<tg-keylistener [keys]="keys[0]" (keyUp)="directions[0] = false" (keyDown)="directions[0] = true"></tg-keylistener>
-		<tg-keylistener [keys]="keys[1]" (keyUp)="directions[1] = false" (keyDown)="directions[1] = true"></tg-keylistener>
-		<tg-keylistener [keys]="keys[2]" (keyUp)="directions[2] = false" (keyDown)="directions[2] = true"></tg-keylistener>
-		<tg-keylistener [keys]="keys[3]" (keyUp)="directions[3] = false" (keyDown)="directions[3] = true"></tg-keylistener>
-		<tg-keylistener [keys]="keys[4]" #forward></tg-keylistener>
-		<tg-keylistener [keys]="keys[5]" #backward></tg-keylistener>
+		<tg-keylistener [keys]="keys[0]" global="true" (keyUp)="directions[0] = false" (keyDown)="directions[0] = true"></tg-keylistener>
+		<tg-keylistener [keys]="keys[1]" global="true" (keyUp)="directions[1] = false" (keyDown)="directions[1] = true"></tg-keylistener>
+		<tg-keylistener [keys]="keys[2]" global="true" (keyUp)="directions[2] = false" (keyDown)="directions[2] = true"></tg-keylistener>
+		<tg-keylistener [keys]="keys[3]" global="true" (keyUp)="directions[3] = false" (keyDown)="directions[3] = true"></tg-keylistener>
+		<tg-keylistener [keys]="keys[4]" global="true" #forward></tg-keylistener>
+		<tg-keylistener [keys]="keys[5]" global="true" #backward></tg-keylistener>
 	`
 })
 export class TranslationComponent {
@@ -37,16 +37,16 @@ export class TranslationComponent {
 			// this.appService.updated.takeUntil(this.backward.keyUp)
 				// .subscribe((updateEvent) => this.position.z -= updateEvent.delta / 500);
 		// });
-		this.appService.update.subscribe((event) => {
+		this.appService.updated.subscribe((delta) => {
 			if (this.directions[0]) {
-				this.position.y += event.delta / 1000;
+				this.position.y += delta / 1000;
 			} else if (this.directions[2]) {
-				this.position.y -= event.delta / 1000;
+				this.position.y -= delta / 1000;
 			}
 			if (this.directions[1]) {
-				this.position.x += event.delta / 1000;
+				this.position.x += delta / 1000;
 			} else if (this.directions[3]) {
-				this.position.x -= event.delta / 1000;
+				this.position.x -= delta / 1000;
 			}
 		});
 	}

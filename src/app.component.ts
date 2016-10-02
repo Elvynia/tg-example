@@ -1,12 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
-import {TrilliangularComponent} from 'trilliangular/app/trilliangular.component';
-import {TgActorComponent} from 'trilliangular/core/tg-actor.component';
-import {TgRendererComponent} from 'trilliangular/core/tg-renderer.component';
-import {TgCameraComponent} from 'trilliangular/core/tg-camera.component';
-import {TgSceneComponent} from 'trilliangular/core/tg-scene.component';
-import {TgKeylistenerComponent} from 'trilliangular/core/tg-keylistener.component';
-import {StartEvent} from 'trilliangular/event/start-event.class';
-import {UpdateEvent} from 'trilliangular/event/update-event.class';
+
+import {TgSceneComponent} from 'trilliangular/runtime/three/tg-scene.component';
+import {TgObjectComponent} from 'trilliangular/runtime/three/tg-object.component';
 
 import {ExampleCubeComponent} from './example-cube.component';
 
@@ -14,20 +9,20 @@ import {ExampleCubeComponent} from './example-cube.component';
 	selector: 'example',
 	template: `
 		<h1>Trilliangular example</h1>
-		<trilliangular width="600" height="400" (start)="start($event)">
-			<tg-scene #scene>
-				<tg-renderer #renderer></tg-renderer>
-				<example-cube></example-cube>
-				<tg-actor id="ambientLight" [active]="lightActive" [visible]="lightVisible" #actor>
-					<tg-object bound="true" name="AmbientLight" [args]="[10526880, 2]" #object>
+		<trilliangular width="600" height="400" debug="true" (started)="start($event)">
+			<tg-renderer></tg-renderer>
+			<tg-scene>
+				<tg-actor id="ambientLight" [visible]="lightVisible">
+					<tg-instance bound="true" name="AmbientLight" [args]="[10526880, 2]">
 						<tg-keylistener keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keylistener>
-					</tg-object>
+					</tg-instance>
 				</tg-actor>
+				<example-cube [active]="actorsActive"></example-cube>
 			</tg-scene>
 		</trilliangular>
 		<div>
 			Global bind active : <input type="checkbox" [(ngModel)]="globalBind" />
-			Light active : <input type="checkbox" [(ngModel)]="lightActive" />
+			Example cube actors active : <input type="checkbox" [(ngModel)]="actorsActive" />
 			Light visible : <input type="checkbox" [(ngModel)]="lightVisible" />
 		</div>
 		<div id="sceneInfos">
@@ -37,26 +32,38 @@ import {ExampleCubeComponent} from './example-cube.component';
 	`
 })
 export class AppComponent {
-	globalBind: boolean = true;
-	lightActive: boolean = true;
-	lightVisible: boolean = true;
-	scene: TgSceneComponent;
+	globalBind: boolean;
+	actorsActive: boolean;
+	lightVisible: boolean;
 	actorCount: number;
+	@ViewChild(TgSceneComponent)
+	scene: TgSceneComponent;
+	@ViewChild('greenCube')
+	private greenCube: TgObjectComponent;
+	@ViewChild('blueCube')
+	private blueCube: TgObjectComponent;
+	@ViewChild('redCube')
+	private redCube: TgObjectComponent;
+
+	constructor() {
+		this.globalBind = true;
+		this.actorsActive = true;
+		this.lightVisible = true;
+		this.actorCount = 0;
+	}
 	
 	ngDoCheck() {
-		if (this.scene && this.actorCount != this.scene.actors.length) {
+		if (this.scene.actors) {
 			this.actorCount = this.scene.actors.length;
 		}
 	}
 
-	private start(event: StartEvent) {
-		event.renderer.setSize(event.width, event.height);
-		event.camera.position.z = 5;
-		this.scene = event.scene;
+	private start(event) {
+		event.target.renderer.camera.position.z = 5;
 	}
 	
-	private switchLight(event) {
-		this.lightActive = !this.lightActive;
+	private switchLight() {
+		this.actorsActive = !this.actorsActive;
 	}
 	
 	private logActorCount() {
