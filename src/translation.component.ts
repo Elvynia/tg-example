@@ -1,4 +1,4 @@
-import { Component, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { TgKeylistenerComponent } from 'trilliangular/inputs/tg-keylistener.component';
 import { TrilliangularService } from 'trilliangular/app/trilliangular.service';
@@ -10,17 +10,16 @@ import { TrilliangularService } from 'trilliangular/app/trilliangular.service';
 		<tg-keylistener [keys]="keys[1]" global="true" (keyUp)="directions[1] = false" (keyDown)="directions[1] = true"></tg-keylistener>
 		<tg-keylistener [keys]="keys[2]" global="true" (keyUp)="directions[2] = false" (keyDown)="directions[2] = true"></tg-keylistener>
 		<tg-keylistener [keys]="keys[3]" global="true" (keyUp)="directions[3] = false" (keyDown)="directions[3] = true"></tg-keylistener>
-		<tg-keylistener [keys]="keys[4]" global="true" #forward></tg-keylistener>
-		<tg-keylistener [keys]="keys[5]" global="true" #backward></tg-keylistener>
-	`
+		<tg-keylistener [keys]="keys[4]" global="true" (keyUp)="directions[4] = false" (keyDown)="directions[4] = true"></tg-keylistener>
+		<tg-keylistener [keys]="keys[5]" global="true" (keyUp)="directions[5] = false" (keyDown)="directions[5] = true"></tg-keylistener>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TranslationComponent {
 	private directions: Array<boolean>;
 	@Input() position: any;
 	@Input() keys: Array<string>;
 	@Output() positionChange: EventEmitter<any>;
-	@ViewChild('forward') forward: TgKeylistenerComponent;
-	@ViewChild('backward') backward: TgKeylistenerComponent;
 	
 	constructor(private appService: TrilliangularService) {
 		this.directions = [false, false, false, false];
@@ -29,14 +28,6 @@ export class TranslationComponent {
 	}
 	
 	ngOnInit() {
-		// this.forward.keyDown.subscribe(() => {
-			// this.appService.updated.takeUntil(this.forward.keyUp)
-				// .subscribe((updateEvent) => this.position.z += updateEvent.delta / 500);
-		// });
-		// this.backward.keyDown.subscribe(() => {
-			// this.appService.updated.takeUntil(this.backward.keyUp)
-				// .subscribe((updateEvent) => this.position.z -= updateEvent.delta / 500);
-		// });
 		this.appService.updated.subscribe((delta) => {
 			if (this.directions[0]) {
 				this.position.y += delta / 1000;
@@ -47,6 +38,11 @@ export class TranslationComponent {
 				this.position.x += delta / 1000;
 			} else if (this.directions[3]) {
 				this.position.x -= delta / 1000;
+			}
+			if (this.directions[4]) {
+				this.position.z += delta / 1000;
+			} else if (this.directions[5]) {
+				this.position.z -= delta / 1000;
 			}
 		});
 	}

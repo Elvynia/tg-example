@@ -1,5 +1,6 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 
+import {TrilliangularService} from 'trilliangular/app/trilliangular.service'
 import {TgSceneComponent} from 'trilliangular/runtime/three/tg-scene.component';
 import {TgObjectComponent} from 'trilliangular/runtime/three/tg-object.component';
 
@@ -29,7 +30,9 @@ import {ExampleCubeComponent} from './example-cube.component';
 			Current actors count : {{actorCount}}
 			<button (click)="logActorCount()">Log actor count</button>
 		</div>
-	`
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	providers: [TrilliangularService]
 })
 export class AppComponent {
 	globalBind: boolean;

@@ -1,7 +1,9 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import {TrilliangularService} from 'trilliangular/app/trilliangular.service';
 import {TgSceneService} from 'trilliangular/core/tg-scene.service';
 import {TgObjectComponent} from 'trilliangular/runtime/three/tg-object.component';
+import {TgMouselistener} from 'trilliangular/inputs/tg-mouselistener.class';
+import {TgMouselistenerService} from 'trilliangular/inputs/tg-mouselistener.service';
 
 @Component({
 	selector: 'example-cube',
@@ -19,7 +21,6 @@ import {TgObjectComponent} from 'trilliangular/runtime/three/tg-object.component
 				<div id="cubePosition" *ngIf="greenCubeControls">
 					Cube position :<br>
 					x -> <input type="number" [(ngModel)]="greenCube.instance.position.x">
-					<translation [keys]="['z', 'd', 's', 'q', 'a', 'e']" [(position)]="greenCube.instance.position"></translation>
 				</div>
 			</tg-object>
 		</tg-actor>
@@ -33,7 +34,10 @@ import {TgObjectComponent} from 'trilliangular/runtime/three/tg-object.component
 			Actor in DOM <input type="checkbox" [(ngModel)]="ifActor">
 			Object in DOM <input type="checkbox" [(ngModel)]="ifObject">
 		</div>
-	`
+		<translation *ngIf="selectedPosition" [keys]="['z', 'd', 's', 'q', 'a', 'e']" [(position)]="selectedPosition"></translation>
+	`,
+	providers: [TgMouselistenerService],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExampleCubeComponent {
 	@Input() active: boolean;
@@ -41,6 +45,7 @@ export class ExampleCubeComponent {
 	private ifActor: boolean;
 	private ifObject: boolean;
 	private greenCubeControls: boolean;
+	private selectedPosition: any;
 	@ViewChild('greenCube')
 	private greenCube: TgObjectComponent;
 	@ViewChild('blueCube')
@@ -48,7 +53,8 @@ export class ExampleCubeComponent {
 	@ViewChild('redCube')
 	private redCube: TgObjectComponent;
 
-	constructor(private appService: TrilliangularService, private sceneService: TgSceneService) {
+	constructor(private appService: TrilliangularService, private sceneService: TgSceneService,
+		private mouselistenerService: TgMouselistenerService, private cd: ChangeDetectorRef) {
 		this.materialArgs = {
 			color: 0x00ff00,
 			specular: 0x009900,
@@ -58,6 +64,16 @@ export class ExampleCubeComponent {
 		this.ifActor = true;
 		this.ifObject = true;
 		this.greenCubeControls = false;
+		this.selectedPosition = null;
+	}
+
+	ngOnInit() {
+		this.mouselistenerService.initialize(document.getElementsByTagName("body")[0]);
+		// this.mouselistenerService.events.subscribe((event:TgMouselistener) => setTimeout(() => {
+		// 	this.selectCube(event.nativeEvent);
+		// 	this.cd.markForCheck();
+		// }, 0));
+		this.mouselistenerService.events.subscribe((event:TgMouselistener) => this.selectCube(event.nativeEvent));
 	}
 
 	ngDoCheck() {
@@ -82,5 +98,13 @@ export class ExampleCubeComponent {
 	
 	private startCubeLeft(event) {
 		this.blueCube.instance.position.x = -2;
+	}
+
+	private selectCube(event: MouseEvent) {
+		let selection = this.mouselistenerService.mouseSelect(event.clientX, event.clientY);
+		if (selection.length > 0) {
+			console.warn('CUBE SELECTION CHANGED');
+			this.selectedPosition = selection[0].object.position;
+		}
 	}
 }
