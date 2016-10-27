@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
-import { TgKeylistenerComponent } from 'trilliangular/inputs/tg-keylistener.component';
-import { TrilliangularService } from 'trilliangular/app/trilliangular.service';
+import { TrilliangularService } from '@trilliangular/core';
+import { TgKeysComponent } from '@trilliangular/inputs';
 
 @Component({
 	selector: 'translation',

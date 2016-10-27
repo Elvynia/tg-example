@@ -2,10 +2,11 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
-import {TrilliangularModule}  from 'trilliangular/app/trilliangular.module';
-import {TgThreeModule}  from 'trilliangular/runtime/three/tg-three.module';
+import {TrilliangularModule}  from '@trilliangular/core';
+import {TgInputsModule}  from '@trilliangular/inputs';
+import {TgThreeModule} from '@trilliangular/runtime-three';
 
-import { AppComponent }  from './app.component';
+import { TgExampleComponent }  from './tg-example.component';
 import { ExampleCubeComponent }  from './example-cube.component';
 import { TranslationComponent }  from './translation.component';
 
@@ -14,15 +15,16 @@ import { TranslationComponent }  from './translation.component';
 	BrowserModule,
 	FormsModule,
 	TrilliangularModule,
+	TgInputsModule,
 	TgThreeModule
   ],
   declarations: [
-	AppComponent,
+	TgExampleComponent,
 	ExampleCubeComponent,
 	TranslationComponent
   ],
-  bootstrap:    [ AppComponent ]
+  bootstrap:    [ TgExampleComponent ]
 })
-export class AppModule {
+export class TgExampleModule {
 
 }

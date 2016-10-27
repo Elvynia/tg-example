@@ -1,17 +1,17 @@
 import {Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 
-import {TrilliangularService} from 'trilliangular/app/trilliangular.service'
-import {TgSceneComponent} from 'trilliangular/runtime/three/tg-scene.component';
-import {TgObjectComponent} from 'trilliangular/runtime/three/tg-object.component';
+import {TrilliangularService}  from '@trilliangular/core';
+import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three';
 
 import {ExampleCubeComponent} from './example-cube.component';
 
 @Component({
-	selector: 'example',
+	selector: 'tg-example',
 	template: `
 		<h1>Trilliangular example</h1>
+		<canvas #canvas></canvas>
 		<trilliangular width="600" height="400" debug="true" (started)="start($event)">
-			<tg-renderer></tg-renderer>
+			<tg-renderer [renderTarget]="canvas"></tg-renderer>
 			<tg-scene>
 				<tg-actor id="ambientLight" [visible]="lightVisible">
 					<tg-instance bound="true" name="AmbientLight" [args]="[10526880, 2]">
@@ -34,7 +34,7 @@ import {ExampleCubeComponent} from './example-cube.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [TrilliangularService]
 })
-export class AppComponent {
+export class TgExampleComponent {
 	globalBind: boolean;
 	actorsActive: boolean;
 	lightVisible: boolean;

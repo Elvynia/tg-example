@@ -1,9 +1,8 @@
 import {Component, Input, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
-import {TrilliangularService} from 'trilliangular/app/trilliangular.service';
-import {TgSceneService} from 'trilliangular/core/tg-scene.service';
-import {TgObjectComponent} from 'trilliangular/runtime/three/tg-object.component';
-import {TgMouselistener} from 'trilliangular/inputs/tg-mouselistener.class';
-import {TgMouselistenerService} from 'trilliangular/inputs/tg-mouselistener.service';
+
+import {TrilliangularService, TgSceneService}  from '@trilliangular/core';
+import {TgMouse, TgMouseService, MOUSE}  from '@trilliangular/inputs';
+import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three';
 
 @Component({
 	selector: 'example-cube',
@@ -36,7 +35,7 @@ import {TgMouselistenerService} from 'trilliangular/inputs/tg-mouselistener.serv
 		</div>
 		<translation *ngIf="selectedPosition" [keys]="['z', 'd', 's', 'q', 'a', 'e']" [(position)]="selectedPosition"></translation>
 	`,
-	providers: [TgMouselistenerService],
+	providers: [TgMouseService],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExampleCubeComponent {
@@ -54,7 +53,7 @@ export class ExampleCubeComponent {
 	private redCube: TgObjectComponent;
 
 	constructor(private appService: TrilliangularService, private sceneService: TgSceneService,
-		private mouselistenerService: TgMouselistenerService, private cd: ChangeDetectorRef) {
+		private mouseService: TgMouseService, private cd: ChangeDetectorRef) {
 		this.materialArgs = {
 			color: 0x00ff00,
 			specular: 0x009900,
@@ -68,12 +67,8 @@ export class ExampleCubeComponent {
 	}
 
 	ngOnInit() {
-		this.mouselistenerService.initialize(document.getElementsByTagName("body")[0]);
-		// this.mouselistenerService.events.subscribe((event:TgMouselistener) => setTimeout(() => {
-		// 	this.selectCube(event.nativeEvent);
-		// 	this.cd.markForCheck();
-		// }, 0));
-		this.mouselistenerService.events.subscribe((event:TgMouselistener) => this.selectCube(event.nativeEvent));
+		this.mouseService.initialize(document.getElementsByTagName("body")[0]);
+		this.mouseService.eventsByType(MOUSE.CLICKED).subscribe((event:TgMouse) => this.selectCube(event.nativeEvent));
 	}
 
 	ngDoCheck() {
@@ -101,10 +96,12 @@ export class ExampleCubeComponent {
 	}
 
 	private selectCube(event: MouseEvent) {
-		let selection = this.mouselistenerService.mouseSelect(event.clientX, event.clientY);
+		let selection = this.mouseService.mouseSelect(event.clientX, event.clientY);
 		if (selection.length > 0) {
-			console.warn('CUBE SELECTION CHANGED');
 			this.selectedPosition = selection[0].object.position;
+			// Ajout de la detection du changement pour mettre à jour la position passée
+			// en paramètre du TranslationComponent dans la template.
+			this.cd.detectChanges();
 		}
 	}
 }
