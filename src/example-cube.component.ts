@@ -2,7 +2,7 @@ import {Component, Input, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy}
 
 import {TrilliangularService, TgSceneService, TgActor}  from '@trilliangular/core';
 import {TgMouse, TgMouseService, MOUSE}  from '@trilliangular/inputs';
-import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three';
+import {TgObjectComponent, TgMouseServiceThree}  from '@trilliangular/runtime-three';
 
 @Component({
 	selector: 'example-cube',
@@ -17,7 +17,7 @@ import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three
 			<tg-object [bound]="true" name="Mesh" *ngIf="ifObject" #greenCube>
 				<tg-instance name="BoxGeometry" [args]="[1, 1, 1]"></tg-instance>
 				<tg-instance name="MeshPhongMaterial" [args]="materialArgs"></tg-instance>
-				<div id="cubePosition" *ngIf="greenCubeControls">
+				<div id="cubePosition" *ngIf="greenCube.instance">
 					Cube position :<br>
 					x -> <input type="number" [(ngModel)]="greenCube.instance.position.x">
 				</div>
@@ -34,8 +34,13 @@ import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three
 			Object in DOM <input type="checkbox" [(ngModel)]="ifObject">
 		</div>
 		<translation *ngIf="selectedPosition" [keys]="['z', 'd', 's', 'q', 'a', 'e']" [(position)]="selectedPosition"></translation>
+		<div>
+			Selected position :
+			<span *ngIf="selectedPosition">[{{ selectedPosition.x }}, {{ selectedPosition.y }}, {{ selectedPosition.z }}]</span>
+			<span *ngIf="!selectedPosition">UNDEFINED</span>
+		</div>
 	`,
-	providers: [TgMouseService],
+	providers: [{provide: TgMouseService, useClass: TgMouseServiceThree}],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExampleCubeComponent {
@@ -43,7 +48,6 @@ export class ExampleCubeComponent {
 	private materialArgs: any;
 	private ifActor: boolean;
 	private ifObject: boolean;
-	private greenCubeControls: boolean;
 	private selectedPosition: any;
 	@ViewChild('greenCube')
 	private greenCube: TgObjectComponent;
@@ -62,21 +66,12 @@ export class ExampleCubeComponent {
 		};
 		this.ifActor = true;
 		this.ifObject = true;
-		this.greenCubeControls = false;
 		this.selectedPosition = null;
 	}
 
 	ngOnInit() {
 		this.mouseService.initialize(document.getElementsByTagName("canvas")[0]);
 		this.mouseService.eventsByType(MOUSE.CLICKED).subscribe((event:TgMouse) => this.selectCube(event.nativeEvent));
-	}
-
-	ngDoCheck() {
-		if (this.greenCube && this.greenCube.instance) {
-			this.greenCubeControls = true;
-		} else {
-			this.greenCubeControls = false;
-		}
 	}
 	
 	private rotateCube(delta: number) {
