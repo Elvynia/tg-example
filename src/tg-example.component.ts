@@ -1,7 +1,7 @@
 import {Component, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 
-import {TrilliangularService}  from '@trilliangular/core';
-import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three';
+import {TrilliangularService, Trilliangular}  from '@trilliangular/core';
+import {TgSceneComponent, TgObjectComponent, TgRendererThree}  from '@trilliangular/runtime-three';
 
 import {ExampleCubeComponent} from './example-cube.component';
 
@@ -13,8 +13,8 @@ import {ExampleCubeComponent} from './example-cube.component';
 		<trilliangular width="600" height="400" debug="true" (started)="start($event)">
 			<tg-renderer [renderTarget]="canvas"></tg-renderer>
 			<tg-scene>
-				<tg-actor id="ambientLight" [visible]="lightVisible">
-					<tg-instance bound="true" name="AmbientLight" [args]="[10526880, 2]">
+				<tg-actor id="ambientLight">
+					<tg-instance [bound]="true" name="AmbientLight" [args]="[10526880, 2]" [visible]="lightVisible">
 						<tg-keylistener keys="l" (keyUp)="switchLight($event)" [global]="globalBind" [scoped]="false"></tg-keylistener>
 					</tg-instance>
 				</tg-actor>
@@ -61,8 +61,8 @@ export class TgExampleComponent {
 		}
 	}
 
-	private start(event) {
-		event.target.renderer.camera.position.z = 5;
+	private start(state: Trilliangular) {
+		(<TgRendererThree> state.renderer).camera.position.z = 5;
 	}
 	
 	private switchLight() {

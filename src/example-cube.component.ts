@@ -1,6 +1,6 @@
 import {Component, Input, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 
-import {TrilliangularService, TgSceneService}  from '@trilliangular/core';
+import {TrilliangularService, TgSceneService, TgActor}  from '@trilliangular/core';
 import {TgMouse, TgMouseService, MOUSE}  from '@trilliangular/inputs';
 import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three';
 
@@ -8,13 +8,13 @@ import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three
 	selector: 'example-cube',
 	template: `
 		<tg-actor id="cubeLeft" [active]="active" (started)="startCubeLeft($event)">
-			<tg-object bound="true" name="Mesh" #blueCube>
+			<tg-object [bound]="true" name="Mesh" #blueCube>
 				<tg-instance name="BoxGeometry" [args]="[1, 1, 1]"></tg-instance>
 				<tg-instance name="MeshPhongMaterial" [args]="{ color: 16711680, specular: 39168, shininess: 30, shading: 1 }"></tg-instance>
 			</tg-object>
 		</tg-actor>
 		<tg-actor id="cube" [active]="active" (updated)="rotateCube($event)" *ngIf="ifActor">
-			<tg-object bound="true" name="Mesh" *ngIf="ifObject" #greenCube>
+			<tg-object [bound]="true" name="Mesh" *ngIf="ifObject" #greenCube>
 				<tg-instance name="BoxGeometry" [args]="[1, 1, 1]"></tg-instance>
 				<tg-instance name="MeshPhongMaterial" [args]="materialArgs"></tg-instance>
 				<div id="cubePosition" *ngIf="greenCubeControls">
@@ -24,7 +24,7 @@ import {TgSceneComponent, TgObjectComponent}  from '@trilliangular/runtime-three
 			</tg-object>
 		</tg-actor>
 		<tg-actor id="cubeRight" [active]="active" (started)="startCubeRight($event)">
-			<tg-object bound="true" name="Mesh" #redCube>
+			<tg-object [bound]="true" name="Mesh" #redCube>
 				<tg-instance name="BoxGeometry" [args]="[1, 1, 1]"></tg-instance>
 				<tg-instance name="MeshPhongMaterial" [args]="{ color: 255, specular: 39168, shininess: 30, shading: 1 }"></tg-instance>
 			</tg-object>
@@ -67,7 +67,7 @@ export class ExampleCubeComponent {
 	}
 
 	ngOnInit() {
-		this.mouseService.initialize(document.getElementsByTagName("body")[0]);
+		this.mouseService.initialize(document.getElementsByTagName("canvas")[0]);
 		this.mouseService.eventsByType(MOUSE.CLICKED).subscribe((event:TgMouse) => this.selectCube(event.nativeEvent));
 	}
 
@@ -79,19 +79,19 @@ export class ExampleCubeComponent {
 		}
 	}
 	
-	private rotateCube(delta) {
-		if (this.greenCube && this.greenCube.stateService.target.instance) {
+	private rotateCube(delta: number) {
+		if (this.greenCube && this.greenCube.stateService.state.instance) {
 			this.greenCube.instance.rotation.x += delta / 1000;
 			this.greenCube.instance.rotation.y += delta / 1000;
 		}
 	}
 	
-	private startCubeRight(event) {
+	private startCubeRight(state: TgActor) {
 		this.redCube.instance.position.x = 2;
 	}
 	
 	
-	private startCubeLeft(event) {
+	private startCubeLeft(state: TgActor) {
 		this.blueCube.instance.position.x = -2;
 	}
 

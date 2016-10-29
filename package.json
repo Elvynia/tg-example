@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "typings install &&  ntsc",
-    "lite": "lite-server",
-    "ntsc:w": "ntsc -w",
-    "start": "concurrently \"npm run ntsc:w\" \"npm run lite\" "
+    "start": "lite-server",
+    "watch": "ntsc -w",
+    "dev": "concurrently \"npm run watch\" \"npm run start\" "
   },
   "repository": {
     "type": "git",
