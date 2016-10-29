@@ -1,6 +1,6 @@
 {
   "name": "tg-example",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Testing Trilliangular framework with a basic example",
   "main": "index.js",
   "scripts": {
